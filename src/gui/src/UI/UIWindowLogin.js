@@ -74,7 +74,8 @@ async function UIWindowLogin(options){
                 h += `</form>`;
             h += `</div>`;
             // create account link
-            if(options.show_signup_button === undefined || options.show_signup_button){
+            // patch(LeoCatsune): disabled by default
+            if(options.show_signup_button){
                 h += `<div class="c2a-wrapper" style="padding:20px;">`;
                     h += `<button class="signup-c2a-clickable">${i18n('create_free_account')}</button>`;
                 h += `</div>`;
@@ -381,6 +382,9 @@ async function UIWindowLogin(options){
         })
 
         $(el_window).find('.signup-c2a-clickable').on('click', async function(e){
+            // patch(LeoCatsune): If this does somehow get called, ignore it.
+            return;
+            
             //destroy this window
             $(el_window).close();
             // create Signup window

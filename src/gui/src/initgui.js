@@ -381,7 +381,9 @@ window.initgui = async function(options){
     // Action: Signup
     //--------------------------------------------------------------------------------------
     else if(action === 'signup'){
-        await UIWindowSignup();
+        // patch(LeoCatsune): Disable sign-up functionality.
+        await UIWindowLogin();
+        // await UIWindowSignup();
     }
 
     // -------------------------------------------------------------------------------------
@@ -847,54 +849,56 @@ window.initgui = async function(options){
 
     // -------------------------------------------------------------------------------------
     // Un-authed and first visit ever -> create temp user
+    // patch(LeoCatsune): Disable temp user registration.
     // -------------------------------------------------------------------------------------
-    else if(!window.is_auth() && window.first_visit_ever){
-        let referrer;
-        try{
-            referrer = new URL(window.location.href).pathname;
-        }catch(e){
-            console.log(e)
-        }
 
-        referrer = window.openerOrigin ?? referrer;
+    // else if(!window.is_auth() && window.first_visit_ever){
+    //     let referrer;
+    //     try{
+    //         referrer = new URL(window.location.href).pathname;
+    //     }catch(e){
+    //         console.log(e)
+    //     }
 
-        // a global object that will be used to store the user's referrer
-        window.referrerStr = referrer;
+    //     referrer = window.openerOrigin ?? referrer;
 
-        // in case there is also a referrer query param, add it to the referrer URL
-        if(window.url_query_params.has('ref')){
-            if(!referrer)
-                referrer = '/';
-            referrer += '?ref=' + html_encode(window.url_query_params.get('ref'));
-        }
+    //     // a global object that will be used to store the user's referrer
+    //     window.referrerStr = referrer;
+
+    //     // in case there is also a referrer query param, add it to the referrer URL
+    //     if(window.url_query_params.has('ref')){
+    //         if(!referrer)
+    //             referrer = '/';
+    //         referrer += '?ref=' + html_encode(window.url_query_params.get('ref'));
+    //     }
 
 
-        let headers = {};
-        if(window.custom_headers)
-            headers = window.custom_headers;
-        $.ajax({
-            url: window.gui_origin + "/signup",
-            type: 'POST',
-            async: true,
-            headers: headers,
-            contentType: "application/json",
-            data: JSON.stringify({
-                referrer: referrer,
-                referral_code: window.referral_code,
-                is_temp: true,
-            }),
-            success: async function (data){
-                window.update_auth_data(data.token, data.user);
-                document.dispatchEvent(new Event("login", { bubbles: true}));
-            },
-            error: function (err){
-                $('#signup-error-msg').html(html_encode(err.responseText));
-                $('#signup-error-msg').fadeIn();
-                // re-enable 'Create Account' button
-                $('.signup-btn').prop('disabled', false);
-            }
-        });
-    }
+    //     let headers = {};
+    //     if(window.custom_headers)
+    //         headers = window.custom_headers;
+    //     $.ajax({
+    //         url: window.gui_origin + "/signup",
+    //         type: 'POST',
+    //         async: true,
+    //         headers: headers,
+    //         contentType: "application/json",
+    //         data: JSON.stringify({
+    //             referrer: referrer,
+    //             referral_code: window.referral_code,
+    //             is_temp: true,
+    //         }),
+    //         success: async function (data){
+    //             window.update_auth_data(data.token, data.user);
+    //             document.dispatchEvent(new Event("login", { bubbles: true}));
+    //         },
+    //         error: function (err){
+    //             $('#signup-error-msg').html(html_encode(err.responseText));
+    //             $('#signup-error-msg').fadeIn();
+    //             // re-enable 'Create Account' button
+    //             $('.signup-btn').prop('disabled', false);
+    //         }
+    //     });
+    // }
 
     // if there is at least one window open (only non-Explorer windows), ask user for confirmation when navigating away
     if(window.feature_flags.prompt_user_when_navigation_away_from_puter){

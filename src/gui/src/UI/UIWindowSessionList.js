@@ -37,7 +37,10 @@ async function UIWindowSessionList(options){
             }
             h += `</div>`;
 
-            h += `<div style="margin-top: 20px; margin-bottom: 20px; text-align:center;"><span class="login-c2a-session-list">Log Into Another Account</span> &bull; <span class="signup-c2a-session-list">${i18n('create_account')}</span></div>`;
+            // h += `<div style="margin-top: 20px; margin-bottom: 20px; text-align:center;"><span class="login-c2a-session-list">Log Into Another Account</span> &bull; <span class="signup-c2a-session-list">${i18n('create_account')}</span></div>`;
+            
+            // patch(LeoCatsune): remove registration button, by force.
+            h += `<div style="margin-top: 20px; margin-bottom: 20px; text-align:center;"><span class="login-c2a-session-list">Log Into Another Account</span></div>`;
         h += `</div>`;
 
         const el_window = await UIWindow({
@@ -100,6 +103,9 @@ async function UIWindowSessionList(options){
             }
         })
         $(el_window).find('.signup-c2a-session-list').on('click', async function(e){
+            // patch(LeoCatsune): Once again, if this somehow gets triggered, ignore.
+            return;
+
             $('.signup-c2a-clickable').parents('.window').close();
             // create Signup window
             const signup = await UIWindowSignup({

@@ -23,6 +23,9 @@ import UIWindowEmailConfirmationRequired from './UIWindowEmailConfirmationRequir
 import check_password_strength from '../helpers/check_password_strength.js'
 
 function UIWindowSignup(options){
+    // patch(LeoCatsune): If this does get spawned, reject it.
+    return new Promise((_resolve, reject) => {reject(new Error("Registration is disabled on this instance."))})
+
     options = options ?? {};
     options.reload_on_success = options.reload_on_success ?? false;
     options.has_head = options.has_head ?? true;
